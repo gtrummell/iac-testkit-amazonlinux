@@ -8,7 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 COPY requirements.txt requirements.txt
 
-RUN yum erase -y -q docker \
+RUN yum update -y -q &&\
+    yum erase -y -q docker \
         docker-client \
         docker-client-latest \
         docker-common \
@@ -18,16 +19,15 @@ RUN yum erase -y -q docker \
         docker-selinux \
         docker-engine-selinux \
         docker-engine &&\
-    curl -fsSL -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo &&\
     yum install -y -q \
-        docker-ce \
-        docker-compose \
         gcc \
         gzip \
         jq \
         python2-devel \
         python2-setuptools \
         unzip &&\
+    amazon-linux-extras install -y -q \
+        docker &&\
     yum upgrade -y -q &&\
     yum clean all -y -q &&\
     ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime &&\
